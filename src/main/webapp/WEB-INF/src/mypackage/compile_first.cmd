@@ -1,4 +1,4 @@
-javac -classpath ..\..\..\..\lib\servlet-api.jar First.java
+javac -classpath ..\..\lib\servlet-api.jar First.java
 pause
 move First.class ..\..\classes\mypackage
 
