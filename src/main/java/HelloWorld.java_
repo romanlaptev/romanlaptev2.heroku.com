@@ -1,0 +1,182 @@
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.http.*;
+
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.*;
+
+// import java.io.File;
+// import java.lang.management.ManagementFactory;
+// import org.eclipse.jetty.jmx.MBeanContainer;
+// import org.eclipse.jetty.server.Server;
+// import org.eclipse.jetty.server.handler.AllowSymLinkAliasChecker;
+// import org.eclipse.jetty.webapp.WebAppContext;
+
+// import org.eclipse.jetty.server.Handler;
+// import org.eclipse.jetty.server.handler.DefaultHandler;
+// import org.eclipse.jetty.server.handler.HandlerList;
+// import org.eclipse.jetty.server.handler.ResourceHandler;
+
+//import org.eclipse.jetty.util.resource.Resource;
+//import org.eclipse.jetty.webapp.WebAppContext;
+//import org.eclipse.jetty.webapp.Configuration;
+
+import java.io.PrintWriter;
+import javax.servlet.ServletException;
+//import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import java.util.Enumeration;
+
+public class HelloWorld extends HttpServlet {
+
+	String servletName = "";
+	//String initAction = "000";
+	String serverInfo = "";
+	
+    public void init() throws ServletException {
+    //public void init( ServletConfig config ) throws ServletException {
+		servletName = getServletName();
+		//initAction = getInitParameter("initAction");		
+		
+		//this.config = config;  
+		//ServletContext sc = config.getServletContext();  
+		ServletContext sc = getServletContext();  
+		serverInfo = sc.getServerInfo();
+    }//end init()
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+				
+		resp.setContentType("text/html");
+		
+		PrintWriter out = resp.getWriter();
+		
+		String msg;
+		for( int n = 1; n < 6; n++){
+			msg = "<h" +n+">" + "Hello from Java!" + "</h"+n+">";
+			out.print( msg );
+		}
+		
+out.println("<b>getContentLength:</b> " + req.getContentLength() );
+out.println("<br>");
+
+out.println("<b>getContentType:</b> " + req.getContentType() );
+out.println("<br>");
+
+out.println("<b>getProtocol:</b> " + req.getProtocol() );
+out.println("<br>");
+
+out.println("<b>getRemoteAddr:</b> " + req.getRemoteAddr() );
+out.println("<br>");
+
+out.println("<b>getRemoteHost:</b> " + req.getRemoteHost() );
+out.println("<br>");
+
+out.println("<b>getScheme:</b> " + req.getScheme() );
+out.println("<br>");
+
+out.println("<b>getServerName:</b> " + req.getServerName() );
+out.println("<br>");
+
+out.println("<b>getServerPort:</b> " + req.getServerPort() );
+out.println("<br>");
+		
+out.println("<b>server info:</b>" + serverInfo);
+out.println("<br>");
+
+out.println("<b>servlet name:</b>" + servletName);
+out.println("<br>");
+
+//out.println("initAction:" + initAction);
+//out.println("<br>");
+
+String ver = System.getProperty("java.version");
+out.println("<b>java.version:</b> " + ver);
+out.println("<br>");
+
+out.println("<b>ContextPath: </b>" + req.getContextPath() );
+out.println("<br>");
+
+//out.println("<b>getRealPath:</b> " + req.getRealPath("/") );
+//out.println("<br>");
+
+out.println("<b>System.getenv Path:</b> " + System.getenv("PATH") );
+out.println("<br>");
+
+out.println("<b>System.getenv CLASSPATH:</b> " + System.getenv("CLASSPATH") );
+out.println("<br>");
+
+out.println("<b>System.getenv TEMP:</b> " + System.getenv("TEMP") );
+out.println("<br>");
+
+out.println("<b>System.getenv USERNAME:</b> " + System.getenv("USERNAME") );
+out.println("<br>");
+
+out.println("<b>java.class.path:</b> " + System.getProperty("java.class.path") );
+out.println("<br>");
+//--------------------------------
+		Enumeration paramNames = req.getParameterNames();
+		String parName;
+
+		if( paramNames.hasMoreElements() ){
+			out.println("<ul>");
+			while( paramNames.hasMoreElements() ){
+				parName = (String) paramNames.nextElement();
+				out.println("<li>");
+				out.println("<b>" + parName + "</b>: " + req.getParameter(parName) );
+				out.println("</li>");
+			}//end while
+			out.println("</ul>");
+		}
+
+    }//end doGet()
+
+    public static void main(String[] args) throws Exception{
+		
+        Server server = new Server( Integer.valueOf( System.getenv("PORT") ) );
+        ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        context.setContextPath("/");
+        server.setHandler(context);
+        context.addServlet( new ServletHolder( new HelloWorld() ),"/*");
+        server.start();
+        server.join();   
+
+		//https://strangeway.org/2013/10/%D0%B2%D1%81%D1%82%D1%80%D0%B0%D0%B8%D0%B2%D0%B0%D0%B5%D0%BC-jetty/
+		//http://akutepov.ru/ru/blog/vstraivaem-jetty-server-v-svoi-proekt/
+		//https://www.programcreek.com/java-api-examples/index.php?source_dir=jena-master/jena-fuseki2/jena-fuseki-core/src/main/java/org/apache/jena/fuseki/jetty/JettyFuseki.java
+		// Server server = new Server( 80 );
+        // WebAppContext context = new WebAppContext();
+		// context.setDescriptor("/WEB-INF/web.xml");
+		// context.setResourceBase("../src/main/webapp");
+        // context.setContextPath("/");
+        // context.setParentLoaderPriority(true);
+		
+        // server.setHandler(context);
+		
+        // server.start();
+        // server.join();   
+		
+		//https://www.eclipse.org/jetty/documentation/9.4.x/embedded-examples.html
+		//Simple File Server
+		// Server server = new Server( 80 );
+		// ResourceHandler resource_handler = new ResourceHandler();
+		// resource_handler.setDirectoriesListed(true);
+		// resource_handler.setWelcomeFiles(new String[]{ "index.html" });
+		// resource_handler.setResourceBase(".");
+		
+		// HandlerList handlers = new HandlerList();
+		// handlers.setHandlers(new Handler[] { resource_handler, new DefaultHandler() });
+		// server.setHandler(handlers);		
+		// server.start();
+		// server.join();
+
+    }
+}
