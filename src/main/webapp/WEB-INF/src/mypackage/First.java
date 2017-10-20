@@ -71,7 +71,7 @@ String ver = System.getProperty("java.version");
 writer.println("java.version:" + ver);
 writer.println("<br>");
 
-        writer.println("<h1>my First Servlet</h1>");
+        writer.println("<h1>First Servlet</h1>");
         writer.println("<b>Path: </b>" + request.getContextPath() );
 		
 		writer.println("<div class='panel panel-primary'>");
