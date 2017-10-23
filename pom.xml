@@ -5,7 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.example</groupId>
     <version>1.0-SNAPSHOT</version>
-    <artifactId>firstapp</artifactId>
+    <artifactId>runserver</artifactId>
+    <!-- <artifactId>firstapp</artifactId> -->
     <!-- <artifactId>helloworld</artifactId> -->
     <dependencies>
 <!--	
